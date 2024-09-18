@@ -1,6 +1,8 @@
+// app/page.js
+
 "use client";
-import Card from "@/components/Card";
 import React, { useEffect, useState } from "react";
+import Slider from "@/components/Slider";
 
 const Page = () => {
   const [movies, setMovies] = useState([]);
@@ -29,20 +31,16 @@ const Page = () => {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-      {movies.length === 0 && loading
-        ? Array.from({ length: 8 }).map((_, index) => (
-            <Card key={index} loading={true} />
-          )) // Show 8 skeleton cards while loading
-        : movies.map((movie) => (
-            <Card
-              key={movie.id}
-              title={movie.title}
-              image={movie.poster_path}
-              loading={false} // Show the actual card when data is available
-            />
-          ))}
+  <>
+
+    <div className="px-4">
+      <Slider movies={movies} loading={loading} />
     </div>
+
+    <div className="px-4">
+      <Slider movies={movies} loading={loading} />
+    </div>
+  </>
   );
 };
 
