@@ -1,15 +1,16 @@
-"use client"
-import React, { useEffect, useState } from "react"
-import Slider from "@/components/Slider"
-import Trailers from "@/components/Trailers"
-import ContentTitle from "@/components/MoviesTitle"
+"use client";
+import React, { useEffect, useState } from "react";
+import Slider from "@/components/Slider";
+import Trailers from "@/components/Trailers";
+import ContentTitle from "@/components/MoviesTitle";
 
 const Page = () => {
-  const [movies, setMovies] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [timeWindow, setTimeWindow] = useState("day")
-  const [freeContent, setFreeContent] = useState([])
-  const [type, setType] = useState("movie")
+  const [movies, setMovies] = useState([]);
+  const [loadingTrending, setLoadingTrending] = useState(true);
+  const [timeWindow, setTimeWindow] = useState("day");
+  const [freeContent, setFreeContent] = useState([]);
+  const [loadingFreeContent, setLoadingFreeContent] = useState(true);
+  const [type, setType] = useState("movie");
 
   // Fetch trending movies based on time window
   useEffect(() => {
@@ -21,24 +22,24 @@ const Page = () => {
             accept: "application/json",
             Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_READ_ACCESS_TOKEN}`,
           },
-        }
+        };
 
         const response = await fetch(
           `https://api.themoviedb.org/3/trending/movie/${timeWindow}?language=en-US`,
-          options,
-        )
+          options
+        );
 
-        const data = await response.json()
-        setMovies(data.results)
-        setLoading(false)
+        const data = await response.json();
+        setMovies(data.results);
+        setLoadingTrending(false);
       } catch (error) {
-        console.error("Error fetching movies:", error)
-        setLoading(false)
+        console.error("Error fetching trending movies:", error);
+        setLoadingTrending(false);
       }
-    }
+    };
 
-    fetchMovies()
-  }, [timeWindow])
+    fetchMovies();
+  }, [timeWindow]);
 
   // Fetch free-to-watch content based on type (movie or tv)
   useEffect(() => {
@@ -50,22 +51,24 @@ const Page = () => {
             accept: "application/json",
             Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_READ_ACCESS_TOKEN}`,
           },
-        }
+        };
 
         const response = await fetch(
-          `https://api.themoviedb.org/3/${type}/popular?language=en-US`,
-          options,
-        )
+          `https://api.themoviedb.org/3/discover/${type}?language=en-US&watch_region=US&with_watch_monetization_types=free`,
+          options
+        );
 
-        const data = await response.json()
-        setFreeContent(data.results)
+        const data = await response.json();
+        setFreeContent(data.results);
+        setLoadingFreeContent(false);
       } catch (error) {
-        console.error("Error fetching free content:", error)
+        console.error("Error fetching free content:", error);
+        setLoadingFreeContent(false);
       }
-    }
+    };
 
-    fetchFreeToWatch()
-  }, [type])
+    fetchFreeToWatch();
+  }, [type]);
 
   return (
     <main className="min-h-screen container mx-auto">
@@ -103,7 +106,7 @@ const Page = () => {
         </div>
       </header>
 
-      {/* First component */}
+      {/* First component: Trending Movies */}
       <div className="px-4 my-8">
         <ContentTitle
           title="Trending Movies"
@@ -113,10 +116,10 @@ const Page = () => {
             { value: "week", label: "This Week" },
           ]}
         />
-        <Slider movies={movies} loading={loading} />
+        <Slider movies={movies} loading={loadingTrending} />
       </div>
 
-      {/* Second Slider in the Trailers component */}
+      {/* Second Slider: Trailers component */}
       <Trailers />
 
       {/* Third component: Free to Watch Section */}
@@ -129,10 +132,10 @@ const Page = () => {
             { value: "tv", label: "TV Shows" },
           ]}
         />
-        <Slider movies={freeContent} loading={loading} />
+        <Slider movies={freeContent} loading={loadingFreeContent} />
       </div>
     </main>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

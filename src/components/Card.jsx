@@ -22,7 +22,7 @@ const CardComponent = ({ image, loading, title, progress }) => {
         )}
       </CardBody>
       <CardFooter className="text-small justify-between">
-        <b>{title}</b>
+        <b className="truncate">{title}</b> {/* Add truncate class for ellipsis */}
       </CardFooter>
     </Card>
   );
