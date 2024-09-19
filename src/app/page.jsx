@@ -1,14 +1,17 @@
 "use client"
 import React, { useEffect, useState } from "react"
 import Slider from "@/components/Slider"
-import MoviesTitle from "@/components/MoviesTitle"
 import Trailers from "@/components/Trailers"
+import ContentTitle from "@/components/MoviesTitle"
 
 const Page = () => {
   const [movies, setMovies] = useState([])
   const [loading, setLoading] = useState(true)
   const [timeWindow, setTimeWindow] = useState("day")
+  const [freeContent, setFreeContent] = useState([])
+  const [type, setType] = useState("movie")
 
+  // Fetch trending movies based on time window
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -26,7 +29,7 @@ const Page = () => {
         )
 
         const data = await response.json()
-        setMovies(data.results) // Ensure full movie data is passed
+        setMovies(data.results)
         setLoading(false)
       } catch (error) {
         console.error("Error fetching movies:", error)
@@ -36,6 +39,33 @@ const Page = () => {
 
     fetchMovies()
   }, [timeWindow])
+
+  // Fetch free-to-watch content based on type (movie or tv)
+  useEffect(() => {
+    const fetchFreeToWatch = async () => {
+      try {
+        const options = {
+          method: "GET",
+          headers: {
+            accept: "application/json",
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_READ_ACCESS_TOKEN}`,
+          },
+        }
+
+        const response = await fetch(
+          `https://api.themoviedb.org/3/${type}/popular?language=en-US`,
+          options,
+        )
+
+        const data = await response.json()
+        setFreeContent(data.results)
+      } catch (error) {
+        console.error("Error fetching free content:", error)
+      }
+    }
+
+    fetchFreeToWatch()
+  }, [type])
 
   return (
     <main className="min-h-screen container mx-auto">
@@ -73,20 +103,34 @@ const Page = () => {
         </div>
       </header>
 
+      {/* First component */}
       <div className="px-4 my-8">
-        <MoviesTitle
+        <ContentTitle
+          title="Trending Movies"
           setTimeWindow={setTimeWindow}
           options={[
             { value: "day", label: "Today" },
             { value: "week", label: "This Week" },
           ]}
         />
-        {/* First Slider */}
         <Slider movies={movies} loading={loading} />
       </div>
 
       {/* Second Slider in the Trailers component */}
       <Trailers />
+
+      {/* Third component: Free to Watch Section */}
+      <div className="px-4 my-8">
+        <ContentTitle
+          title="Free to Watch"
+          setTimeWindow={setType}
+          options={[
+            { value: "movie", label: "Movies" },
+            { value: "tv", label: "TV Shows" },
+          ]}
+        />
+        <Slider movies={freeContent} loading={loading} />
+      </div>
     </main>
   )
 }

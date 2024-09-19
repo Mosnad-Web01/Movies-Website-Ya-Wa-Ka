@@ -2,22 +2,22 @@
 
 import { useState } from "react";
 
-const MoviesTitle = ({ setTimeWindow, options }) => {
+const ContentTitle = ({ title, setTimeWindow, options }) => {
   const [activeButton, setActiveButton] = useState(options[0].value); 
 
-  const handleTimeWindowChange = (value) => {
+  const handleOptionChange = (value) => {
     setActiveButton(value);
     setTimeWindow(value); 
   };
 
   return (
-    <div className="p-6 flex gap-4">
-      <h1 className="text-3xl font-bold">Trending Movies</h1>
+    <div className="p-6 flex gap-4 items-center">
+      <h1 className="text-3xl font-bold">{title}</h1>
       <div className="inline-flex rounded-lg border border-gray-300 overflow-hidden">
         {options.map((option) => (
           <button
             key={option.value}
-            onClick={() => handleTimeWindowChange(option.value)}
+            onClick={() => handleOptionChange(option.value)}
             className={`px-6 py-2 transition-colors duration-200 ${
               activeButton === option.value
                 ? "bg-blue-500 text-white"
@@ -32,4 +32,4 @@ const MoviesTitle = ({ setTimeWindow, options }) => {
   );
 };
 
-export default MoviesTitle;
+export default ContentTitle;
