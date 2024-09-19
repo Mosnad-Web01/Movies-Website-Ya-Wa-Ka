@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Slider from "@/components/Slider";
+import TrailerSlider from "@/components/TrailerSlider"; // Use TrailerSlider instead of Slider
 
 const categories = ["Popular", "Streaming", "For Rent", "In Theaters"];
 const categoryToEndpoint = {
@@ -70,7 +70,7 @@ const Trailers = () => {
         </div>
 
         <div className='relative'>
-          <Slider movies={movies} loading={loading} />
+          <TrailerSlider movies={movies} loading={loading} /> {/* Use TrailerSlider */}
         </div>
       </div>
     </div>
