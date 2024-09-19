@@ -1,10 +1,8 @@
-// components/CardComponent.js
-
 import React from "react";
 import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
 import Circularprogress from "./CircularProgress";
 
-const CardComponent = ({ image, loading, title,progress }) => {
+const CardComponent = ({ image, loading, title, progress }) => {
   return (
     <Card shadow="sm" isPressable className="w-44 inline-flex m-2 relative overflow-hidden">
       <CardBody className="p-0 relative">
@@ -15,7 +13,7 @@ const CardComponent = ({ image, loading, title,progress }) => {
             <Circularprogress progress={progress} />
             <Image
               className="w-full object-cover h-[140px]"
-              src={`https://image.tmdb.org/t/p/w500/${image}`}
+              src={image} 
               alt={title}
               width={350}
               height={250}

@@ -50,7 +50,6 @@ const Footer = () => {
               </ul>
             </div>
   
-            {/* Copyright Section */}
             <div className="text-center">
               <p className="text-sm">© 2024 Your Project. All Rights Reserved.</p>
             </div>
