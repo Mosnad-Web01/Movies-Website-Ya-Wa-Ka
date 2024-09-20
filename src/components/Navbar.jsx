@@ -56,12 +56,12 @@ export default function App() {
           </Link>
         </NavbarItem>
         <NavbarItem isActive>
-          <Link href="movies" aria-current="page">
+          <Link href="/movies" aria-current="page">
             Movies
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground" href="actors">
+          <Link color="foreground" href="/actors">
             Actors
           </Link>
         </NavbarItem>

@@ -63,6 +63,8 @@ const ActorsPage = () => {
               image={`https://image.tmdb.org/t/p/w500${actor.profile_path}`}
               customClass="w-full"
               loading={false}
+              id={actor.id} 
+              isActor={true}
             />
           ))
         ) : showNoActorsMessage ? (
