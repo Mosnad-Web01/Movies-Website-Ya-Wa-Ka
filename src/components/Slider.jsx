@@ -14,6 +14,7 @@ const Slider = ({ movies = [], loading }) => {
             key={movie.id}
             title={movie.title || movie.name}
             image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+            date={movie.release_date}
             progress={movie.vote_average * 10} 
             loading={false}
           />
