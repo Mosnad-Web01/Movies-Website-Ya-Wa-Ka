@@ -24,7 +24,7 @@ const Slider = ({ movies = [], loading }) => {
       ) : (
         <p>No movies available</p>
       )}
-    </div>
+    </div>      
   );
 };
 
