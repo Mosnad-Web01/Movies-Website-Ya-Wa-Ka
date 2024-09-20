@@ -1,24 +1,22 @@
-"use client"
-import CardComponent from "@/components/Card"
-import React, { useState, useEffect } from "react"
-import { Pagination } from "@nextui-org/react"
-import FilterSidebar from "./components/FilterSidebar"
+"use client";
+import CardComponent from "@/components/Card";
+import React, { useState, useEffect } from "react";
+import { Pagination } from "@nextui-org/react";
+import FilterSidebar from "./components/FilterSidebar";
 
-const API_READ_ACCESS_TOKEN = process.env.NEXT_PUBLIC_API_READ_ACCESS_TOKEN
+const API_READ_ACCESS_TOKEN = process.env.NEXT_PUBLIC_API_READ_ACCESS_TOKEN;
 
 const fetchMovies = async (filter, page, filters) => {
   try {
-    let url = `https://api.themoviedb.org/3/movie/${filter}?language=en-US&page=${page}`
-
-    
+    let url = `https://api.themoviedb.org/3/movie/${filter}?language=en-US&page=${page}`;
     if (filters.genre) {
-      url += `&with_genres=${filters.genre}`
+      url += `&with_genres=${filters.genre}`;
     }
     if (filters.releaseYear) {
-      url += `&primary_release_year=${filters.releaseYear}`
+      url += `&primary_release_year=${filters.releaseYear}`;
     }
     if (filters.voteAverage) {
-      url += `&vote_average.gte=${filters.voteAverage}`
+      url += `&vote_average.gte=${filters.voteAverage}`;
     }
 
     const response = await fetch(url, {
@@ -26,44 +24,47 @@ const fetchMovies = async (filter, page, filters) => {
         Authorization: `Bearer ${API_READ_ACCESS_TOKEN}`,
         "Content-Type": "application/json",
       },
-    })
+    });
     if (!response.ok) {
-      throw new Error("Failed to fetch movies")
+      throw new Error("Failed to fetch movies");
     }
-    const data = await response.json()
-    return { results: data.results, total_pages: data.total_pages }
+    const data = await response.json();
+    return { results: data.results, total_pages: data.total_pages };
   } catch (error) {
-    console.error("Error fetching movies:", error)
-    return { results: [], total_pages: 0 }
+    console.error("Error fetching movies:", error);
+    return { results: [], total_pages: 0 };
   }
-}
-
+};
 
 const Page = () => {
-  const [movies, setMovies] = useState([])
-  const [filter, setFilter] = useState("popular")
-  const [currentPage, setCurrentPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(0)
-  const [appliedFilters, setAppliedFilters] = useState({}) 
+  const [movies, setMovies] = useState([]);
+  const [filter, setFilter] = useState("popular");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [appliedFilters, setAppliedFilters] = useState({});
+  const [loading, setLoading] = useState(true); // New loading state
+  const [showNoMoviesMessage, setShowNoMoviesMessage] = useState(false); // Delay state
 
   useEffect(() => {
     const getMovies = async () => {
+      setLoading(true);
       const { results, total_pages } = await fetchMovies(
         filter,
         currentPage,
-        appliedFilters 
-      )
-      setMovies(results)
-      setTotalPages(total_pages)
-    }
-    getMovies()
-  }, [filter, currentPage, appliedFilters])
+        appliedFilters
+      );
+      setMovies(results);
+      setTotalPages(total_pages);
+      setLoading(false);
+      setTimeout(() => setShowNoMoviesMessage(true), 5000); // Show "No movies" message after 5 seconds
+    };
+    getMovies();
+  }, [filter, currentPage, appliedFilters]);
 
   const handleFilterChange = (filters) => {
-    setAppliedFilters(filters) 
-    setCurrentPage(1) 
-  }
-  
+    setAppliedFilters(filters);
+    setCurrentPage(1);
+  };
 
   return (
     <div className="flex flex-col lg:flex-row p-6">
@@ -71,15 +72,14 @@ const Page = () => {
         <FilterSidebar onFilterChange={handleFilterChange} />
       </div>
 
-
       <div className="flex-1">
         <div className="flex gap-4 mb-4 justify-center flex-wrap">
           {["popular", "now_playing", "upcoming", "top_rated"].map((category) => (
             <button
               key={category}
               onClick={() => {
-                setFilter(category)
-                setCurrentPage(1) 
+                setFilter(category);
+                setCurrentPage(1);
               }}
               className={`px-4 py-2 rounded-lg transition-colors duration-200 ${
                 filter === category
@@ -94,7 +94,11 @@ const Page = () => {
 
         {/* Movies Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 lg:gap-6 gap-2  mb-6">
-          {movies && movies.length > 0 ? (
+          {loading ? (
+            Array.from({ length: 12 }).map((_, idx) => (
+              <CardComponent key={idx} loading={true} />
+            ))
+          ) : movies && movies.length > 0 ? (
             movies.map((movie) => (
               <CardComponent
                 key={movie.id}
@@ -106,9 +110,9 @@ const Page = () => {
                 customClass="w-full"
               />
             ))
-          ) : (
+          ) : showNoMoviesMessage ? (
             <p>No movies found.</p>
-          )}
+          ) : null}
         </div>
 
         {/* Pagination */}
@@ -121,7 +125,7 @@ const Page = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;
