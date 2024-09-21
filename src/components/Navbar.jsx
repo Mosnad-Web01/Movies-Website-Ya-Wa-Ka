@@ -1,6 +1,5 @@
-"use client";
-
-import React from "react";
+'use client'
+import React, { useState } from 'react';
 import {
   Navbar,
   NavbarBrand,
@@ -8,14 +7,24 @@ import {
   NavbarMenuItem,
   NavbarMenu,
   NavbarContent,
-  NavbarItem,
+  NavbarItem, 
   Button,
-} from "@nextui-org/react";
-import Link from "next/link.js";
-import { AcmeLogo } from "../../public/AcmeLogo.jsx";
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from '@nextui-org/react';
+import Link from 'next/link.js';
+import { AcmeLogo } from '../../public/AcmeLogo.jsx';
+import Login from './Login.jsx';
 
 export default function App() {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showLoginForm, setShowLoginForm] = useState(false); 
+
+  const handleLoginClick = () => {
+    setShowLoginForm(true);
+  };
 
   const menuItems = [
     "Profile",
@@ -27,10 +36,11 @@ export default function App() {
     "My Settings",
     "Team Settings",
     "Help & Feedback",
-    "Log Out",
-  ];
+    "Log Out",   
 
+  ]
   return (
+    
     <Navbar isBordered isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
       <NavbarContent className="sm:hidden" justify="start">
         <NavbarMenuToggle
@@ -51,26 +61,69 @@ export default function App() {
           <p className="font-bold text-inherit">ACME</p>
         </NavbarBrand>
         <NavbarItem>
-          <Link color="foreground" href="/">
-            Home
-          </Link>
-        </NavbarItem>
-        <NavbarItem isActive>
-          <Link href="movies" aria-current="page">
-            Movies
-          </Link>
+        <Dropdown>
+           <DropdownTrigger>
+             <Button ><Link href="#">Home</Link></Button>
+           </DropdownTrigger>
+
+         </Dropdown>
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground" href="actors">
-            Actors
-          </Link>
+        <Dropdown>
+           <DropdownTrigger>
+             <Button >Geners</Button>
+           </DropdownTrigger>
+           <DropdownMenu>
+
+           </DropdownMenu>
+         </Dropdown>
+        </NavbarItem>
+
+        <NavbarItem isActive>
+        <Dropdown>
+           <DropdownTrigger>
+             <Button >Movies</Button>
+           </DropdownTrigger>
+           <DropdownMenu>
+             <DropdownItem onClick={() => router('Top Rate')}>
+               Top Rated
+             </DropdownItem>
+             <DropdownItem onClick={() => router('Popular')}>
+               Popular
+             </DropdownItem>
+             <DropdownItem onClick={() => router('Latest')}>
+               Latest
+             </DropdownItem>
+             <DropdownItem onClick={() => router('Now playing')}>
+               Now Playing
+            </DropdownItem>
+            <DropdownItem onClick={() => router('Upcoming')}>
+               Upcoming
+          </DropdownItem>
+           </DropdownMenu>
+         </Dropdown>
+        </NavbarItem>
+
+        <NavbarItem>
+        <Dropdown>
+           <DropdownTrigger>
+             <Button >Actors</Button>
+           </DropdownTrigger>
+           <DropdownMenu>
+
+           </DropdownMenu>
+         </Dropdown>
         </NavbarItem>
       </NavbarContent>
 
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
-          <Link href="#">Login</Link>
-        </NavbarItem>
+      <NavbarItem className="hidden lg:flex ">
+      {showLoginForm ? (
+            <Login onClose={() => setShowLoginForm(false)} />
+          ) : (
+            <Button onClick={handleLoginClick}>Login</Button>
+          )}
+    </NavbarItem>
         <NavbarItem>
           <Button as={Link} color="warning" href="#" variant="flat">
             Sign Up
@@ -100,4 +153,6 @@ export default function App() {
       </NavbarMenu>
     </Navbar>
   );
-}
+};
+
+
