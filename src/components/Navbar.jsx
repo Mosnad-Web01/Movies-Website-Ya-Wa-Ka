@@ -1,6 +1,5 @@
-"use client";
-
-import React from "react";
+'use client'
+import React, { useState } from 'react';
 import {
   Navbar,
   NavbarBrand,
@@ -8,14 +7,24 @@ import {
   NavbarMenuItem,
   NavbarMenu,
   NavbarContent,
-  NavbarItem,
+  NavbarItem, 
   Button,
-} from "@nextui-org/react";
-import Link from "next/link.js";
-import { AcmeLogo } from "../../public/AcmeLogo.jsx";
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from '@nextui-org/react';
+import Link from 'next/link.js';
+import { AcmeLogo } from '../../public/AcmeLogo.jsx';
+import Login from './Login.jsx';
 
 export default function App() {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showLoginForm, setShowLoginForm] = useState(false); 
+
+  const handleLoginClick = () => {
+    setShowLoginForm(true);
+  };
 
   const menuItems = [
     "Profile",
@@ -27,17 +36,17 @@ export default function App() {
     "My Settings",
     "Team Settings",
     "Help & Feedback",
-    "Log Out",
+    "Log Out",   
   ];
 
   return (
     <Navbar isBordered isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
+      {/* Mobile menu toggle */}
       <NavbarContent className="sm:hidden" justify="start">
-        <NavbarMenuToggle
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-        />
+        <NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} />
       </NavbarContent>
 
+      {/* Mobile brand */}
       <NavbarContent className="sm:hidden pr-3" justify="center">
         <NavbarBrand>
           <AcmeLogo />
@@ -45,55 +54,96 @@ export default function App() {
         </NavbarBrand>
       </NavbarContent>
 
+      {/* Desktop content */}
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarBrand>
           <AcmeLogo />
           <p className="font-bold text-inherit">ACME</p>
         </NavbarBrand>
+
         <NavbarItem>
-          <Link color="foreground" href="/">
-            Home
+          <Link href="#" passHref>
+            <Button as="a">Home</Button>
           </Link>
         </NavbarItem>
+
+        <NavbarItem>
+          <Dropdown>
+            <DropdownTrigger>
+              <Button>Genres</Button>
+            </DropdownTrigger>
+            <DropdownMenu>
+              {/* Add genre options here */}
+            </DropdownMenu>
+          </Dropdown>
+        </NavbarItem>
+
         <NavbarItem isActive>
-          <Link href="/movies" aria-current="page">
-            Movies
-          </Link>
+          <Dropdown>
+            <DropdownTrigger>
+              <Button>Movies</Button>
+            </DropdownTrigger>
+            <DropdownMenu>
+              <DropdownItem>
+                <Link href="/movies/top-rated">Top Rated</Link>
+              </DropdownItem>
+              <DropdownItem>
+                <Link href="/movies/popular">Popular</Link>
+              </DropdownItem>
+              <DropdownItem>
+                <Link href="/movies/latest">Latest</Link>
+              </DropdownItem>
+              <DropdownItem>
+                <Link href="/movies/now-playing">Now Playing</Link>
+              </DropdownItem>
+              <DropdownItem>
+                <Link href="/movies/upcoming">Upcoming</Link>
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </NavbarItem>
+
         <NavbarItem>
-          <Link color="foreground" href="/actors">
-            Actors
+          <Link href="/actors" passHref>
+            <Button as="a">Actors</Button>
           </Link>
         </NavbarItem>
       </NavbarContent>
 
+      {/* Right side login/signup buttons */}
       <NavbarContent justify="end">
         <NavbarItem className="hidden lg:flex">
-          <Link href="#">Login</Link>
+          {showLoginForm ? (
+            <Login onClose={() => setShowLoginForm(false)} />
+          ) : (
+            <Button onClick={handleLoginClick}>Login</Button>
+          )}
         </NavbarItem>
         <NavbarItem>
-          <Button as={Link} color="warning" href="#" variant="flat">
+          <Button as={Link} href="#" color="warning" variant="flat">
             Sign Up
           </Button>
         </NavbarItem>
       </NavbarContent>
 
+      {/* Mobile menu */}
       <NavbarMenu>
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item}-${index}`}>
-            <Link
-              className="w-full"
-              color={
-                index === 2
-                  ? "warning"
-                  : index === menuItems.length - 1
-                    ? "danger"
-                    : "foreground"
-              }
-              href="#"
-              size="lg"
-            >
-              {item}
+            <Link href="#" passHref>
+              <a
+                className="w-full"
+                style={{
+                  color:
+                    index === 2
+                      ? 'var(--nextui-colors-warning)'
+                      : index === menuItems.length - 1
+                      ? 'var(--nextui-colors-danger)'
+                      : 'var(--nextui-colors-foreground)',
+                }}
+              >
+                {item}
+              </a>
             </Link>
           </NavbarMenuItem>
         ))}
