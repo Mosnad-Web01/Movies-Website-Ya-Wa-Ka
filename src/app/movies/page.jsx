@@ -107,6 +107,7 @@ const Page = () => {
                 date={movie.release_date}
                 progress={movie.vote_average * 10}
                 loading={false}
+                id={movie.id} 
                 customClass="w-full"
               />
             ))

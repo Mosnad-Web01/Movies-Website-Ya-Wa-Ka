@@ -10,10 +10,10 @@ const CardComponent = ({
   progress,
   date,
   customClass,
-  id, // Add id prop to get the movie or actor ID
-  isActor = false, // New prop to determine if the card is for an actor
+  id, 
+  isActor = false,
 }) => {
-  // Determine the correct URL based on whether it's an actor or a movie
+
   const linkHref = isActor ? `/actors/${id}` : `/movies/${id}`;
 
   return (
