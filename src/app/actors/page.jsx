@@ -5,7 +5,7 @@ import { Pagination } from "@nextui-org/react";
 
 const API_READ_ACCESS_TOKEN = process.env.NEXT_PUBLIC_API_READ_ACCESS_TOKEN;
 
-// Fetch Actors from TMDB API
+
 const fetchActors = async (page) => {
   try {
     const url = `https://api.themoviedb.org/3/person/popular?language=en-US&page=${page}`;
@@ -28,10 +28,10 @@ const fetchActors = async (page) => {
 
 const ActorsPage = () => {
   const [actors, setActors] = useState([]);
-  const [loading, setLoading] = useState(true); // New loading state
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [showNoActorsMessage, setShowNoActorsMessage] = useState(false); // Delay state
+  const [showNoActorsMessage, setShowNoActorsMessage] = useState(false);
 
   useEffect(() => {
     const getActors = async () => {
@@ -40,7 +40,7 @@ const ActorsPage = () => {
       setActors(results);
       setTotalPages(total_pages);
       setLoading(false);
-      setTimeout(() => setShowNoActorsMessage(true), 5000); // Show "No actors" message after 5 seconds
+      setTimeout(() => setShowNoActorsMessage(true), 5000);
     };
     getActors();
   }, [currentPage]);

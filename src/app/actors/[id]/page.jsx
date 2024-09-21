@@ -1,11 +1,10 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import { FaTwitter, FaInstagram, FaFacebook, FaTiktok, FaYoutube } from "react-icons/fa";
-import { FaInfoCircle } from "react-icons/fa";
-import { useRouter } from "next/navigation";
-
+import { useEffect, useState } from "react"
+import Image from "next/image"
+import { FaTwitter, FaInstagram, FaFacebook, FaYoutube } from "react-icons/fa"
+import { FaInfoCircle } from "react-icons/fa"
+import CardComponent from "@/components/Card"
 
 // Social Media Base URLs
 const socialMediaBaseUrls = {
@@ -14,7 +13,7 @@ const socialMediaBaseUrls = {
   facebook: "https://www.facebook.com/",
   tiktok: "https://www.tiktok.com/@",
   youtube: "https://www.youtube.com/user/",
-};
+}
 
 // Modal Component for Movie Details
 const MovieDetailsModal = ({ movie, onClose }) => {
@@ -52,7 +51,7 @@ const MovieDetailsModal = ({ movie, onClose }) => {
       </div>
     </div>
   )
-};
+}
 
 // Fetch details of an actor by ID from TMDB API
 const fetchActorDetails = async (id) => {
@@ -75,39 +74,34 @@ const fetchActorDetails = async (id) => {
   }
 }
 
-
-
-
 const ActorDetails = ({ params }) => {
-  const { id } = params;
-  const [actor, setActor] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [showFullBiography, setShowFullBiography] = useState(false);
-  const [selectedMovie, setSelectedMovie] = useState(null);
-  const router = useRouter();
+  const { id } = params
+  const [actor, setActor] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
+  const [showFullBiography, setShowFullBiography] = useState(false)
+  const [selectedMovie, setSelectedMovie] = useState(null)
 
 
   useEffect(() => {
     const loadActor = async () => {
-      setLoading(true);
-      setError("");
+      setLoading(true)
+      setError("")
       try {
-        const data = await fetchActorDetails(id);
-        setActor(data);
+        const data = await fetchActorDetails(id)
+        setActor(data)
       } catch (error) {
-        setError("Failed to load actor details.");
-        console.error("Error fetching actor details:", error);
+        setError("Failed to load actor details.")
+        console.error("Error fetching actor details:", error)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
-    loadActor();
-  }, [id]);
+    }
+    loadActor()
+  }, [id])
 
-
-  if (loading) return <p className="text-gray-400">Loading...</p>;
-  if (!actor) return null;
+  if (loading) return <p className="text-gray-400">Loading...</p>
+  if (!actor) return null
 
   const {
     name,
@@ -119,7 +113,7 @@ const ActorDetails = ({ params }) => {
     movie_credits,
     social_media = {},
     also_known_as = [],
-  } = actor;
+  } = actor
 
   const socialMediaLinks = {
     twitter:
@@ -130,18 +124,12 @@ const ActorDetails = ({ params }) => {
     instagram:
       social_media.instagram && social_media.instagram.trim()
         ? socialMediaBaseUrls.instagram +
-        social_media.instagram.split("/").pop()
+          social_media.instagram.split("/").pop()
         : " ",
 
     facebook:
       social_media.facebook && social_media.facebook.trim()
-        ? socialMediaBaseUrls.facebook +
-        social_media.facebook.split("/").pop()
-        : " ",
-
-    tiktok:
-      social_media.tiktok && social_media.tiktok.trim()
-        ? socialMediaBaseUrls.tiktok + social_media.tiktok.split("/").pop()
+        ? socialMediaBaseUrls.facebook + social_media.facebook.split("/").pop()
         : " ",
 
     youtube:
@@ -150,20 +138,18 @@ const ActorDetails = ({ params }) => {
         : " ",
   }
 
-  const handleMovieClick = (Id) => {
-    router.push(`/movies/${Id}`);
-  };
+
 
   const handleMovieDetailClick = (movie) => {
-    setSelectedMovie(movie);
-  };
+    setSelectedMovie(movie)
+  }
 
   const handleCloseModal = () => {
-    setSelectedMovie(null);
-  };
+    setSelectedMovie(null)
+  }
 
   // Use the same array of movies for both sections
-  const movies = movie_credits.cast;
+  const movies = movie_credits.cast
 
   return (
     <div className="p-6 bg-gray-100 dark:bg-gray-900 text-gray-100 dark:text-gray-900 min-h-screen">
@@ -200,7 +186,6 @@ const ActorDetails = ({ params }) => {
                   {key === "twitter" && <FaTwitter size={24} />}
                   {key === "instagram" && <FaInstagram size={24} />}
                   {key === "facebook" && <FaFacebook size={24} />}
-                  {key === "tiktok" && <FaTiktok size={24} />}
                   {key === "youtube" && <FaYoutube size={24} />}
                 </a>
               ))}
@@ -265,30 +250,20 @@ const ActorDetails = ({ params }) => {
                 )}
               </p>
             </div>
-
             <div className="mb-6">
               <h2 className="text-xl font-semibold mb-2 text-gray-100 dark:text-gray-900">
                 Known For
               </h2>
-              <div className="flex overflow-x-auto space-x-4 py-2">
+              <div className="flex overflow-x-auto space-x-4 py-2 text-black">
                 {movies.slice(0, 10).map((movie) => (
-                  <div
+                  <CardComponent
                     key={movie.id}
-                    className="relative flex-shrink-0 w-48 cursor-pointer"
-                    onClick={() => handleMovieClick(movie.id)}
-                  >
-                    <Image
-                      src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                      alt={movie.title}
-                      width={200}
-                      height={300}
-                      className="w-full h-auto rounded-lg shadow-md transform transition-transform duration-300 hover:scale-105"
-                      loading="lazy"
-                    />
-                    <h3 className="text-sm mt-1 text-center text-gray-300 dark:text-gray-800">
-                      {movie.title}
-                    </h3>
-                  </div>
+                    image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                    title={movie.title}
+                    date={new Date(movie.release_date).getFullYear()}
+                    id={movie.id}
+                    isActor={false} // This is for movies, not actors
+                  />
                 ))}
               </div>
             </div>
@@ -299,9 +274,12 @@ const ActorDetails = ({ params }) => {
               </h2>
               <div className="space-y-4">
                 {movies
-                  .slice() 
-                  .sort((a, b) => new Date(b.release_date) - new Date(a.release_date))
-                  .slice(0, 10)
+                  .slice()
+                  .sort(
+                    (a, b) =>
+                      new Date(b.release_date) - new Date(a.release_date),
+                  )
+                  .slice(0, 15)
                   .map((movie) => (
                     <div
                       key={movie.id}
@@ -339,6 +317,6 @@ const ActorDetails = ({ params }) => {
       )}
     </div>
   )
-};
+}
 
-export default ActorDetails;
+export default ActorDetails
