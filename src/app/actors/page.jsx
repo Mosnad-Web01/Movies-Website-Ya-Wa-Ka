@@ -64,7 +64,7 @@ const ActorsPage = () => {
               customClass="w-full"
               loading={false}
               id={actor.id} 
-              isActor={true}
+              CardType={"actors"}
             />
           ))
         ) : showNoActorsMessage ? (

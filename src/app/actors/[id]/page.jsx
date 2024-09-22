@@ -283,7 +283,7 @@ const ActorDetails = ({ params }) => {
                     title={movie.title}
                     date={new Date(movie.release_date).getFullYear()}
                     id={movie.id}
-                    isActor={false} // This is for movies, not actors
+                    CardType={"movies"} // This is for movies, not actors
                   />
                 ))}
               </div>

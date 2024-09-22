@@ -23,6 +23,7 @@ export default function App() {
     { label: "Home", href: "/" },
     { label: "Movies", href: "/movies" },
     { label: "Actors", href: "/actors" },
+    { label: "Tv Shows", href: "/Tvshow" },
   ];
 
   return (
@@ -41,7 +42,7 @@ export default function App() {
         <NavbarBrand>
           <Link href='/' className="font-bold text-inherit">Movies</Link>
         </NavbarBrand>
-        {menuItems.slice(0, 3).map((item) => (
+        {menuItems.slice(0, 4).map((item) => (
           <NavbarItem key={item.label}>
             <Link href={item.href} className="nav-link">
               {item.label}
@@ -72,8 +73,6 @@ export default function App() {
           </NavbarMenuItem>
         ))}
       </NavbarMenu>
-
-      {/* Modal Components */}
       <Login isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
       <Signup isOpen={isSignupOpen} onClose={() => setIsSignupOpen(false)} />
     </Navbar>
