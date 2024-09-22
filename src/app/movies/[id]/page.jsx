@@ -7,6 +7,7 @@ import CardComponent from "@/components/Card"
 import { FaFacebookF, FaTwitter, FaInstagram, FaYoutube } from "react-icons/fa"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faList, faHeart, faBookmark, faStar } from "@fortawesome/free-solid-svg-icons"
+import { Spinner } from "@nextui-org/react"
 
 // Fetch details of a movie by ID from TMDB API
 const fetchMovieDetails = async (id) => {
@@ -82,7 +83,13 @@ const SingleMoviePage = ({ params }) => {
         loadMovie()
     }, [id])
 
-    if (loading) return <p className="text-gray-400">Loading...</p>
+    if (loading) {
+        return (
+          <div className="flex justify-center items-center min-h-screen">
+            <Spinner />
+          </div>
+        );
+      }
     if (error) return <p className="text-red-500">{error}</p>
 
     if (!movie) return null
@@ -434,6 +441,7 @@ const SingleMoviePage = ({ params }) => {
                             title={movie.title}
                             id={movie.id}
                             customClass="min-w-[160px] md:min-w-[200px]"
+                            isActor={false}
                         >
                             <p className="text-gray-700 dark:text-gray-400 text-center text-xs md:text-sm">
                                 {movie.release_date}

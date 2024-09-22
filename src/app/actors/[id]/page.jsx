@@ -1,10 +1,11 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import Image from "next/image"
-import { FaTwitter, FaInstagram, FaFacebook, FaYoutube } from "react-icons/fa"
-import { FaInfoCircle } from "react-icons/fa"
-import CardComponent from "@/components/Card"
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { FaTwitter, FaInstagram, FaFacebook, FaYoutube } from "react-icons/fa";
+import { FaInfoCircle } from "react-icons/fa";
+import CardComponent from "@/components/Card";
+import { Spinner } from "@nextui-org/react"; // Import the Spinner component
 
 // Social Media Base URLs
 const socialMediaBaseUrls = {
@@ -13,7 +14,7 @@ const socialMediaBaseUrls = {
   facebook: "https://www.facebook.com/",
   tiktok: "https://www.tiktok.com/@",
   youtube: "https://www.youtube.com/user/",
-}
+};
 
 // Modal Component for Movie Details
 const MovieDetailsModal = ({ movie, onClose }) => {
@@ -50,58 +51,64 @@ const MovieDetailsModal = ({ movie, onClose }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 // Fetch details of an actor by ID from TMDB API
 const fetchActorDetails = async (id) => {
   try {
-    const url = `https://api.themoviedb.org/3/person/${id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&append_to_response=movie_credits`
+    const url = `https://api.themoviedb.org/3/person/${id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&append_to_response=movie_credits`;
     const response = await fetch(url, {
       headers: {
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_READ_ACCESS_TOKEN}`,
         "Content-Type": "application/json",
       },
-    })
+    });
     if (!response.ok) {
-      throw new Error("Failed to fetch actor details")
+      throw new Error("Failed to fetch actor details");
     }
-    const data = await response.json()
-    return data // Return the actor details
+    const data = await response.json();
+    return data; // Return the actor details
   } catch (error) {
-    console.error("Error fetching actor details:", error)
-    return null // Return null if there's an error
+    console.error("Error fetching actor details:", error);
+    return null; // Return null if there's an error
   }
-}
+};
 
 const ActorDetails = ({ params }) => {
-  const { id } = params
-  const [actor, setActor] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState("")
-  const [showFullBiography, setShowFullBiography] = useState(false)
-  const [selectedMovie, setSelectedMovie] = useState(null)
-
+  const { id } = params;
+  const [actor, setActor] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [showFullBiography, setShowFullBiography] = useState(false);
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   useEffect(() => {
     const loadActor = async () => {
-      setLoading(true)
-      setError("")
+      setLoading(true);
+      setError("");
       try {
-        const data = await fetchActorDetails(id)
-        setActor(data)
+        const data = await fetchActorDetails(id);
+        setActor(data);
       } catch (error) {
-        setError("Failed to load actor details.")
-        console.error("Error fetching actor details:", error)
+        setError("Failed to load actor details.");
+        console.error("Error fetching actor details:", error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
-    loadActor()
-  }, [id])
+    };
+    loadActor();
+  }, [id]);
 
-  if (loading) return <p className="text-gray-400">Loading...</p>
-  if (!actor) return null
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (!actor) return null;
 
   const {
     name,
@@ -113,43 +120,37 @@ const ActorDetails = ({ params }) => {
     movie_credits,
     social_media = {},
     also_known_as = [],
-  } = actor
+  } = actor;
 
   const socialMediaLinks = {
     twitter:
       social_media.twitter && social_media.twitter.trim()
         ? socialMediaBaseUrls.twitter + social_media.twitter.split("/").pop()
         : " ",
-
     instagram:
       social_media.instagram && social_media.instagram.trim()
         ? socialMediaBaseUrls.instagram +
           social_media.instagram.split("/").pop()
         : " ",
-
     facebook:
       social_media.facebook && social_media.facebook.trim()
         ? socialMediaBaseUrls.facebook + social_media.facebook.split("/").pop()
         : " ",
-
     youtube:
       social_media.youtube && social_media.youtube.trim()
         ? socialMediaBaseUrls.youtube + social_media.youtube.split("/").pop()
         : " ",
-  }
-
-
+  };
 
   const handleMovieDetailClick = (movie) => {
-    setSelectedMovie(movie)
-  }
+    setSelectedMovie(movie);
+  };
 
   const handleCloseModal = () => {
-    setSelectedMovie(null)
-  }
+    setSelectedMovie(null);
+  };
 
-  // Use the same array of movies for both sections
-  const movies = movie_credits.cast
+  const movies = movie_credits.cast;
 
   return (
     <div className="p-6 bg-gray-100 dark:bg-gray-900 text-gray-100 dark:text-gray-900 min-h-screen">
@@ -181,7 +182,27 @@ const ActorDetails = ({ params }) => {
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`text-${key === "twitter" ? "blue-400" : key === "instagram" ? "pink-400" : key === "facebook" ? "blue-600" : key === "tiktok" ? "black" : "red-600"} hover:text-${key === "twitter" ? "blue-600" : key === "instagram" ? "pink-600" : key === "facebook" ? "blue-800" : key === "tiktok" ? "gray-700" : "red-800"} transition-colors`}
+                  className={`text-${
+                    key === "twitter"
+                      ? "blue-400"
+                      : key === "instagram"
+                      ? "pink-400"
+                      : key === "facebook"
+                      ? "blue-600"
+                      : key === "tiktok"
+                      ? "black"
+                      : "red-600"
+                  } hover:text-${
+                    key === "twitter"
+                      ? "blue-600"
+                      : key === "instagram"
+                      ? "pink-600"
+                      : key === "facebook"
+                      ? "blue-800"
+                      : key === "tiktok"
+                      ? "gray-700"
+                      : "red-800"
+                  } transition-colors`}
                 >
                   {key === "twitter" && <FaTwitter size={24} />}
                   {key === "instagram" && <FaInstagram size={24} />}
@@ -277,7 +298,7 @@ const ActorDetails = ({ params }) => {
                   .slice()
                   .sort(
                     (a, b) =>
-                      new Date(b.release_date) - new Date(a.release_date),
+                      new Date(b.release_date) - new Date(a.release_date)
                   )
                   .slice(0, 15)
                   .map((movie) => (
@@ -316,7 +337,7 @@ const ActorDetails = ({ params }) => {
         <MovieDetailsModal movie={selectedMovie} onClose={handleCloseModal} />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ActorDetails
+export default ActorDetails;

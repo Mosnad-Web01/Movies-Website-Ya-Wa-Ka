@@ -8,7 +8,9 @@ const API_READ_ACCESS_TOKEN = process.env.NEXT_PUBLIC_API_READ_ACCESS_TOKEN;
 
 const fetchMovies = async (filter, page, filters) => {
   try {
-    let url = `https://api.themoviedb.org/3/movie/${filter}?language=en-US&page=${page}`;
+    let url = `https://api.themoviedb.org/3/discover/movie?language=en-US&sort_by=${filter}&page=${page}`;
+
+   
     if (filters.genre) {
       url += `&with_genres=${filters.genre}`;
     }
@@ -16,7 +18,9 @@ const fetchMovies = async (filter, page, filters) => {
       url += `&primary_release_year=${filters.releaseYear}`;
     }
     if (filters.voteAverage) {
-      url += `&vote_average.gte=${filters.voteAverage}`;
+     
+      const convertedVoteAverage = filters.voteAverage / 10;
+      url += `&vote_average.gte=${convertedVoteAverage}`;
     }
 
     const response = await fetch(url, {
@@ -38,12 +42,12 @@ const fetchMovies = async (filter, page, filters) => {
 
 const Page = () => {
   const [movies, setMovies] = useState([]);
-  const [filter, setFilter] = useState("popular");
+  const [filter, setFilter] = useState("popularity.desc"); 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [appliedFilters, setAppliedFilters] = useState({});
-  const [loading, setLoading] = useState(true); // New loading state
-  const [showNoMoviesMessage, setShowNoMoviesMessage] = useState(false); // Delay state
+  const [loading, setLoading] = useState(true);
+  const [showNoMoviesMessage, setShowNoMoviesMessage] = useState(false);
 
   useEffect(() => {
     const getMovies = async () => {
@@ -56,7 +60,7 @@ const Page = () => {
       setMovies(results);
       setTotalPages(total_pages);
       setLoading(false);
-      setTimeout(() => setShowNoMoviesMessage(true), 5000); // Show "No movies" message after 5 seconds
+      setTimeout(() => setShowNoMoviesMessage(true), 5000); 
     };
     getMovies();
   }, [filter, currentPage, appliedFilters]);
@@ -74,20 +78,24 @@ const Page = () => {
 
       <div className="flex-1">
         <div className="flex gap-4 mb-4 justify-center flex-wrap">
-          {["popular", "now_playing", "upcoming", "top_rated"].map((category) => (
+          {[{ label: "Popular", value: "popularity.desc" },
+            { label: "Now Playing", value: "now_playing" },
+            { label: "Upcoming", value: "upcoming" },
+            { label: "Top Rated", value: "vote_average.desc" },
+          ].map((category) => (
             <button
-              key={category}
+              key={category.value}
               onClick={() => {
-                setFilter(category);
+                setFilter(category.value);
                 setCurrentPage(1);
               }}
               className={`px-4 py-2 rounded-lg transition-colors duration-200 ${
-                filter === category
+                filter === category.value
                   ? "bg-blue-500 text-white"
                   : "bg-gray-200 text-gray-700"
               } hover:bg-blue-400`}
             >
-              {category.replace("_", " ").toUpperCase()}
+              {category.label}
             </button>
           ))}
         </div>
@@ -107,7 +115,7 @@ const Page = () => {
                 date={movie.release_date}
                 progress={movie.vote_average * 10}
                 loading={false}
-                id={movie.id} 
+                id={movie.id}
                 customClass="w-full"
               />
             ))
