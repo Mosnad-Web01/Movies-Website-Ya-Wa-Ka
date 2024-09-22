@@ -10,11 +10,20 @@ const CardComponent = ({
   progress,
   date,
   customClass,
-  id, 
-  isActor = false,
+  id,
+  CardType,
 }) => {
+  let linkHref = `/`;
 
-  const linkHref = isActor ? `/actors/${id}` : `/movies/${id}`;
+  if (CardType === 'actors') {
+    linkHref = `/actors/${id}`;
+  } else if (CardType === 'Tvshow') {
+    linkHref = `/Tvshow/${id}`;
+  } else if (CardType === 'movies') {
+    linkHref = `/movies/${id}`;
+  }
+
+  // const isActor = CardType === 'actors';
 
   return (
     <Link href={linkHref}>
@@ -28,7 +37,7 @@ const CardComponent = ({
             <div className="w-full h-[140px] bg-gray-300 animate-pulse"></div>
           ) : (
             <>
-              {!isActor && progress !== undefined && ( // Only show progress if not an actor and progress is provided
+              {progress !== undefined && (
                 <CircularProgress progress={progress} />
               )}
               <Image
@@ -43,7 +52,7 @@ const CardComponent = ({
         </CardBody>
         <CardFooter className="text-small flex flex-col items-center">
           <b className="truncate w-full max-w-full whitespace-nowrap overflow-hidden">{title}</b>
-          {date && <small>{date}</small>} {/* Show date only if provided */}
+          {date && <small>{date}</small>}
         </CardFooter>
       </Card>
     </Link>

@@ -5,7 +5,7 @@ import Image from "next/image";
 import { FaTwitter, FaInstagram, FaFacebook, FaYoutube } from "react-icons/fa";
 import { FaInfoCircle } from "react-icons/fa";
 import CardComponent from "@/components/Card";
-import { Spinner } from "@nextui-org/react"; // Import the Spinner component
+import { Spinner } from "@nextui-org/react"; 
 
 // Social Media Base URLs
 const socialMediaBaseUrls = {
@@ -283,7 +283,7 @@ const ActorDetails = ({ params }) => {
                     title={movie.title}
                     date={new Date(movie.release_date).getFullYear()}
                     id={movie.id}
-                    isActor={false} // This is for movies, not actors
+                    CardType={"movies"} 
                   />
                 ))}
               </div>

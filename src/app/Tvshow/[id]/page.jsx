@@ -47,7 +47,7 @@ const fetchMovieDetails = async (id) => {
         return {
             ...movie,
             credits,
-            related_movies: relatedMovies,
+            related_Tvshow: relatedMovies,
             trailer: trailer ? trailer.key : null,
         }
     } catch (error) {
@@ -104,7 +104,7 @@ const SingleMoviePage = ({ params }) => {
         credits,
         production_companies,
         trailer,
-        related_movies,
+        related_Tvshow,
         popularity,
         tagline,
         homepage,
@@ -432,14 +432,14 @@ const SingleMoviePage = ({ params }) => {
                     Recommended Movies
                 </h3>
                 <div className="flex overflow-x-scroll space-x-4 py-4 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
-                    {related_movies.slice(0, 20).map((movie) => (
+                    {related_Tvshow.slice(0, 20).map((movie) => (
                         <CardComponent
                             key={movie.id}
                             image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                             title={movie.title}
                             id={movie.id}
                             customClass="min-w-[160px] md:min-w-[200px]"
-                            CardType={"movies"}
+                            CardType={"Tvshow"}
                         >
                             <p className="text-gray-700 dark:text-gray-400 text-center text-xs md:text-sm">
                                 {movie.release_date}

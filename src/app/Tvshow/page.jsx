@@ -2,13 +2,13 @@
 import CardComponent from "@/components/Card";
 import React, { useState, useEffect } from "react";
 import { Pagination } from "@nextui-org/react";
-import FilterSidebar from "../Tvshow/components/FilterSidebar";
+import FilterSidebar from "./components/FilterSidebar";
 
 const API_READ_ACCESS_TOKEN = process.env.NEXT_PUBLIC_API_READ_ACCESS_TOKEN;
 
-const fetchMovies = async (filter, page, filters) => {
+const fetchTvshow = async (filter, page, filters) => {
   try {
-    let url = `https://api.themoviedb.org/3/discover/movie?language=en-US&sort_by=${filter}&page=${page}`;
+    let url = `https://api.themoviedb.org/3/discover/tv?language=en-US&sort_by=${filter}&page=${page}`;
 
    
     if (filters.genre) {
@@ -30,39 +30,39 @@ const fetchMovies = async (filter, page, filters) => {
       },
     });
     if (!response.ok) {
-      throw new Error("Failed to fetch movies");
+      throw new Error("Failed to fetch Tvshow");
     }
     const data = await response.json();
     return { results: data.results, total_pages: data.total_pages };
   } catch (error) {
-    console.error("Error fetching movies:", error);
+    console.error("Error fetching Tvshow:", error);
     return { results: [], total_pages: 0 };
   }
 };
 
 const Page = () => {
-  const [movies, setMovies] = useState([]);
+  const [Tvshow, setTvshow] = useState([]);
   const [filter, setFilter] = useState("popularity.desc"); 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [appliedFilters, setAppliedFilters] = useState({});
   const [loading, setLoading] = useState(true);
-  const [showNoMoviesMessage, setShowNoMoviesMessage] = useState(false);
+  const [showNoTvshowMessage, setShowNoTvshowMessage] = useState(false);
 
   useEffect(() => {
-    const getMovies = async () => {
+    const getTvshow = async () => {
       setLoading(true);
-      const { results, total_pages } = await fetchMovies(
+      const { results, total_pages } = await fetchTvshow(
         filter,
         currentPage,
         appliedFilters
       );
-      setMovies(results);
+      setTvshow(results);
       setTotalPages(total_pages);
       setLoading(false);
-      setTimeout(() => setShowNoMoviesMessage(true), 5000); 
+      setTimeout(() => setShowNoTvshowMessage(true), 5000); 
     };
-    getMovies();
+    getTvshow();
   }, [filter, currentPage, appliedFilters]);
 
   const handleFilterChange = (filters) => {
@@ -100,28 +100,28 @@ const Page = () => {
           ))}
         </div>
 
-        {/* Movies Grid */}
+        {/* Tvshow Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 lg:gap-6 gap-2  mb-6">
           {loading ? (
             Array.from({ length: 12 }).map((_, idx) => (
               <CardComponent key={idx} loading={true} />
             ))
-          ) : movies && movies.length > 0 ? (
-            movies.map((movie) => (
+          ) : Tvshow && Tvshow.length > 0 ? (
+            Tvshow.map((Tvshow) => (
               <CardComponent
-                key={movie.id}
-                title={movie.title || movie.name}
-                image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                date={movie.release_date}
-                progress={movie.vote_average * 10}
+                key={Tvshow.id}
+                title={Tvshow.title || Tvshow.name}
+                image={`https://image.tmdb.org/t/p/w500${Tvshow.poster_path}`}
+                date={Tvshow.release_date}
+                progress={Tvshow.vote_average * 10}
                 loading={false}
-                id={movie.id}
+                id={Tvshow.id}
                 customClass="w-full"
-                CardType="movies"
+                CardType="Tvshow"
               />
             ))
-          ) : showNoMoviesMessage ? (
-            <p>No movies found.</p>
+          ) : showNoTvshowMessage ? (
+            <p>No Tvshow found.</p>
           ) : null}
         </div>
 
