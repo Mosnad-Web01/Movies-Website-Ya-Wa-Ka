@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Slider from "@/components/Slider";
 import Trailers from "@/components/Trailers";
 import ContentTitle from "@/components/MoviesTitle";
+import { useRouter } from "next/navigation"; // For navigating in Next.js 14
 
 const Page = () => {
   const [movies, setMovies] = useState([]);
@@ -11,6 +12,9 @@ const Page = () => {
   const [freeContent, setFreeContent] = useState([]);
   const [loadingFreeContent, setLoadingFreeContent] = useState(true);
   const [type, setType] = useState("movie");
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
 
   // Fetch trending movies based on time window
   useEffect(() => {
@@ -70,8 +74,16 @@ const Page = () => {
     fetchFreeToWatch();
   }, [type]);
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/search?query=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+
   return (
     <main className="min-h-screen container mx-auto">
+      {/* Header section */}
       <header
         className="relative w-full h-[550px] md:h-[550px] lg:h-[550px] bg-cover bg-center"
         style={{ backgroundImage: "url('/coverImage.jpg')" }}
@@ -88,10 +100,13 @@ const Page = () => {
             blockbusters to rare indie films.
           </p>
 
+          {/* Search form */}
           <div className="w-full max-w-[600px]">
-            <form className="flex items-center justify-center">
+            <form className="flex items-center justify-center" onSubmit={handleSearch}>
               <input
                 type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search for movies, genres, or actors..."
                 className="w-full py-3 px-5 rounded-full bg-white text-black placeholder-gray-500 focus:outline-none shadow-lg"
               />
@@ -119,7 +134,7 @@ const Page = () => {
         <Slider movies={movies} loading={loadingTrending} />
       </div>
 
-      {/* Second Slider: Trailers component */}
+      {/* Second component: Trailers */}
       <Trailers />
 
       {/* Third component: Free to Watch Section */}
