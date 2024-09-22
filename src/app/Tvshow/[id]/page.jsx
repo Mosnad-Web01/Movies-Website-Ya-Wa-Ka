@@ -401,7 +401,7 @@ const SingleMoviePage = ({ params }) => {
                                     title={actor.name}
                                     id={actor.id}
                                     customClass="min-w-[150px] md:min-w-[190px]"
-                                    CardType={true}
+                                    CardType="actors"
                                 >
                                     <p className="text-gray-800 dark:text-gray-400 text-center text-xs md:text-sm">
                                         {actor.character}
