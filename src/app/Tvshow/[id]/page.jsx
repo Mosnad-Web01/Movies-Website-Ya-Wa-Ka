@@ -439,7 +439,7 @@ const SingleMoviePage = ({ params }) => {
                             title={movie.title}
                             id={movie.id}
                             customClass="min-w-[160px] md:min-w-[200px]"
-                            CardType={"Tvshow"}
+                            CardType="Tvshow"
                         >
                             <p className="text-gray-700 dark:text-gray-400 text-center text-xs md:text-sm">
                                 {movie.release_date}

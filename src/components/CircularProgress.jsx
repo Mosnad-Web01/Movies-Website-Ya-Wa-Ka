@@ -18,7 +18,7 @@ export default function Circularprogress({ progress }) {
       value={progress}
       color={getColor(progress)} // Set color based on progress value
       showValueLabel={true}
-      className="absolute top-[2px] left-[2px] z-20 bg-white rounded-full" // Ensure it's above other content
+      className="absolute top-[2px] left-[2px] z-20 bg-white text-black dark:text-white dark:bg-black rounded-full" // Ensure it's above other content
     />
   );
 }
