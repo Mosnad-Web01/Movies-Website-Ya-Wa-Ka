@@ -18,7 +18,7 @@ const Slider = ({ movies = [], loading }) => {
             progress={movie.vote_average * 10} 
             loading={false}
             id={movie.id} 
-            isActor={false} 
+            CardType="movies"
           />
         ))
       ) : (

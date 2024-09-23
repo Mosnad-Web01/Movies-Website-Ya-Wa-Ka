@@ -20,7 +20,7 @@ const socialMediaBaseUrls = {
 const MovieDetailsModal = ({ movie, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-      <div className="bg-white text-gray-900 dark:bg-gray-800 dark:text-white rounded-lg shadow-lg p-6 max-w-lg w-full relative transition-colors duration-300">
+      <div className="bg-  text-gray-900 dark:bg-gray-800 dark:text-white rounded-lg shadow-lg p-6 max-w-lg w-full relative transition-colors duration-300">
         <button
           onClick={onClose}
           className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
@@ -161,7 +161,7 @@ const ActorDetails = ({ params }) => {
             backgroundImage: `url('https://image.tmdb.org/t/p/original${profile_path}')`,
           }}
         >
-          <div className="absolute inset-0 bg-black dark:bg-white opacity-90"></div>
+          <div className="absolute inset-0 bg-black dark:bg-white opacity-70"></div>
         </div>
         <div className="relative flex flex-col md:flex-row gap-6 p-6">
           {/* Left Side */}
@@ -275,7 +275,7 @@ const ActorDetails = ({ params }) => {
               <h2 className="text-xl font-semibold mb-2 text-gray-100 dark:text-gray-900">
                 Known For
               </h2>
-              <div className="flex overflow-x-auto space-x-4 py-2 text-black">
+              <div className="flex overflow-x-auto space-x-4 py-2 dark:text-gray-100 text-black">
                 {movies.slice(0, 10).map((movie) => (
                   <CardComponent
                     key={movie.id}
@@ -307,7 +307,7 @@ const ActorDetails = ({ params }) => {
                       className="relative bg-gray-300 dark:bg-gray-800 p-4 rounded-lg shadow-lg border border-gray-600 dark:border-gray-400 transition-transform transform hover:scale-105"
                     >
                       <div className="flex items-center space-x-4">
-                        <span className="text-gray-500 dark:text-gray-700">
+                        <span className="text-gray-500 dark:text-gray-200">
                           {new Date(movie.release_date).getFullYear()}
                         </span>
                         <button
@@ -320,7 +320,7 @@ const ActorDetails = ({ params }) => {
                           <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                             {movie.title}
                           </h3>
-                          <p className="text-sm text-gray-500 dark:text-gray-700">
+                          <p className="text-sm text-gray-500 dark:text-gray-200">
                             as {movie.character}
                           </p>
                         </div>

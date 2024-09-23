@@ -1,5 +1,5 @@
-"use client";
-import React, { useState } from "react";
+"use client"
+import React, { useState } from "react"
 import {
   Navbar,
   NavbarBrand,
@@ -9,38 +9,45 @@ import {
   NavbarContent,
   NavbarItem,
   Button,
-} from "@nextui-org/react";
-import Link from "next/link";
-import Login from "./Login";
-import Signup from "./Signup";
+} from "@nextui-org/react"
+import Link from "next/link"
+import Login from "./Login"
+import Signup from "./Signup"
+import ThemeToggle from "./ThemeToggle"
 
 export default function App() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isLoginOpen, setIsLoginOpen] = useState(false)
+  const [isSignupOpen, setIsSignupOpen] = useState(false)
 
   const menuItems = [
     { label: "Home", href: "/" },
     { label: "Movies", href: "/movies" },
     { label: "Actors", href: "/actors" },
     { label: "Tv Shows", href: "/Tvshow" },
-  ];
+  ]
 
   return (
     <Navbar isBordered isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
       <NavbarContent className="sm:hidden" justify="start">
-        <NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} />
+        <NavbarMenuToggle
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+        />
       </NavbarContent>
 
       <NavbarContent className="sm:hidden pr-3" justify="center">
         <NavbarBrand>
-          <Link href="/" className="font-bold text-inherit">Movies</Link>
+          <Link href="/" className="font-bold text-inherit">
+            Movies
+          </Link>
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarBrand>
-          <Link href='/' className="font-bold text-inherit">Movies</Link>
+          <Link href="/" className="font-bold text-inherit">
+            Movies
+          </Link>
         </NavbarBrand>
         {menuItems.slice(0, 4).map((item) => (
           <NavbarItem key={item.label}>
@@ -53,12 +60,23 @@ export default function App() {
 
       <NavbarContent justify="end">
         <NavbarItem>
-          <Button color="warning" variant="flat" onPress={() => setIsLoginOpen(true)}>
+          <ThemeToggle />
+        </NavbarItem>
+        <NavbarItem>
+          <Button
+            color="warning"
+            variant="flat"
+            onPress={() => setIsLoginOpen(true)}
+          >
             Log In
           </Button>
         </NavbarItem>
         <NavbarItem>
-          <Button color="warning" variant="flat" onPress={() => setIsSignupOpen(true)}>
+          <Button
+            color="warning"
+            variant="flat"
+            onPress={() => setIsSignupOpen(true)}
+          >
             Sign Up
           </Button>
         </NavbarItem>
@@ -76,5 +94,5 @@ export default function App() {
       <Login isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
       <Signup isOpen={isSignupOpen} onClose={() => setIsSignupOpen(false)} />
     </Navbar>
-  );
+  )
 }
