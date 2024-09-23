@@ -15,11 +15,11 @@ const CardComponent = ({
 }) => {
   let linkHref = `/`;
 
-  if (CardType === 'actors') {
+  if (CardType == 'actors') {
     linkHref = `/actors/${id}`;
-  } else if (CardType === 'Tvshow') {
+  } else if (CardType == 'Tvshow') {
     linkHref = `/Tvshow/${id}`;
-  } else if (CardType === 'movies') {
+  } else if (CardType == 'movies') {
     linkHref = `/movies/${id}`;
   }
 
