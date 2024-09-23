@@ -16,6 +16,6 @@ module.exports = {
       },
     },
   },
-  darkMode: "class",
+  darkMode: 'selector',
   plugins: [nextui(), require("tailwind-scrollbar")],
 }
