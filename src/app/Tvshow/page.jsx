@@ -117,7 +117,7 @@ const Page = () => {
                 loading={false}
                 id={Tvshow.id}
                 customClass="w-full"
-                CardType="Tvshow"
+                CardType={"Tvshow"}
               />
             ))
           ) : showNoTvshowMessage ? (
