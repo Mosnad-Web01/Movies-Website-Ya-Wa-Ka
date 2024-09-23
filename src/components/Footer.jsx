@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from "next/link";
 
 const Footer = () => {
   const teamMembers = [
@@ -17,36 +17,36 @@ const Footer = () => {
       github: "https://github.com/k",
       linkedin: "https://linkedin.com/in/k",
     },
-  ]
+  ];
 
   const pages = [
     { name: "Home", href: "/" },
     { name: "Movies", href: "/movies" },
     { name: "Actors", href: "/actors" },
-  ]
+  ];
 
   return (
-    <footer className="bg-gray-100 text-gray-800 pt-12">
+    <footer className="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-300 pt-12">
       <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
         {/* Team Members Section */}
         <div className="flex flex-wrap gap-8 mb-6 md:mb-0 justify-center md:justify-start">
           {teamMembers.map((member, index) => (
             <div key={index} className="text-center md:text-left">
-              <p className="text-lg font-semibold text-gray-700 mb-2">
+              <p className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">
                 {member.name}
               </p>
               <div className="flex justify-center md:justify-start gap-3">
                 <Link
                   href={member.github}
-                  className="text-blue-600 hover:text-blue-500 transition-colors"
+                  className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors"
                   target="_blank"
                 >
                   GitHub
                 </Link>
-                <span className="text-gray-500">|</span>
+                <span className="text-gray-500 dark:text-gray-400">|</span>
                 <Link
                   href={member.linkedin}
-                  className="text-blue-600 hover:text-blue-500 transition-colors"
+                  className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors"
                   target="_blank"
                 >
                   LinkedIn
@@ -62,7 +62,7 @@ const Footer = () => {
             <Link
               key={index}
               href={page.href}
-              className="text-gray-700 hover:text-gray-900 transition-colors text-lg"
+              className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors text-lg"
             >
               {page.name}
             </Link>
@@ -70,13 +70,13 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="bg-gray-200 py-4 mt-6">
-        <p className="text-sm text-center text-gray-600">
+      <div className="bg-gray-200 dark:bg-gray-800 py-4 mt-6">
+        <p className="text-sm text-center text-gray-600 dark:text-gray-400">
           &copy; 2024 Your Project. All rights reserved.
         </p>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;
