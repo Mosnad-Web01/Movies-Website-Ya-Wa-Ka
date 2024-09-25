@@ -3,6 +3,7 @@ import CardComponent from "@/components/Card";
 import React, { useState, useEffect } from "react";
 import { Pagination } from "@nextui-org/react";
 import FilterSidebar from "./components/FilterSidebar";
+import { m } from "framer-motion";
 
 const API_READ_ACCESS_TOKEN = process.env.NEXT_PUBLIC_API_READ_ACCESS_TOKEN;
 
@@ -107,17 +108,17 @@ const Page = () => {
               <CardComponent key={idx} loading={true} />
             ))
           ) : Tvshow && Tvshow.length > 0 ? (
-            Tvshow.map((Tvshow) => (
+            Tvshow.map((tv) => (
               <CardComponent
-                key={Tvshow.id}
-                title={Tvshow.title || Tvshow.name}
-                image={`https://image.tmdb.org/t/p/w500${Tvshow.poster_path}`}
-                date={Tvshow.release_date}
-                progress={Tvshow.vote_average * 10}
+                key={tv.id}
+                title={tv.title || tv.name}
+                image={`https://image.tmdb.org/t/p/w500${tv.poster_path}`}
+                date={tv.release_date}
+                progress={tv.vote_average * 10}
                 loading={false}
-                id={Tvshow.id}
+                id={tv.id}
                 customClass="w-full"
-                CardType={"Tvshow"}
+                CardType="Tvshow"
               />
             ))
           ) : showNoTvshowMessage ? (

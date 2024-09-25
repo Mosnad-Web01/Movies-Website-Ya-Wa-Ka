@@ -8,7 +8,8 @@ import { FaFacebookF, FaTwitter, FaInstagram, FaYoutube } from "react-icons/fa"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faList, faHeart, faBookmark, faStar } from "@fortawesome/free-solid-svg-icons"
 import { Spinner } from "@nextui-org/react";
-const fetchMovieDetails = async (id) => {
+import { m } from "framer-motion"
+const fetchTvshowDetails = async (id) => {
     try {
         const headers = {
             Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_READ_ACCESS_TOKEN}`,
@@ -20,19 +21,19 @@ const fetchMovieDetails = async (id) => {
             relatedMoviesResponse,
             trailerResponse,
         ] = await Promise.all([
-            axios.get(`https://api.themoviedb.org/3/movie/${id}?language=en-US`, {
+            axios.get(`https://api.themoviedb.org/3/tv/${id}?`, {
                 headers,
             }),
             axios.get(
-                `https://api.themoviedb.org/3/movie/${id}/credits?language=en-US`,
+                `https://api.themoviedb.org/3/tv/${id}/credits?`,
                 { headers },
             ),
             axios.get(
-                `https://api.themoviedb.org/3/movie/${id}/recommendations?language=en-US&page=1`,
+                `https://api.themoviedb.org/3/tv/${id}/recommendations?page=1`,
                 { headers },
             ),
             axios.get(
-                `https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`,
+                `https://api.themoviedb.org/3/tv/${id}/videos?`,
                 { headers },
             ),
         ])
@@ -47,19 +48,19 @@ const fetchMovieDetails = async (id) => {
         return {
             ...movie,
             credits,
-            related_Tvshow: relatedMovies,
+            related_movies: relatedMovies,
             trailer: trailer ? trailer.key : null,
         }
     } catch (error) {
-        console.error("Error fetching movie details:", error)
-        throw new Error("Failed to load movie details")
+        console.error("Error fetching Tvshow details:", error)
+        throw new Error("Failed to load Tvshow details")
     }
 }
 
 
 const SingleMoviePage = ({ params }) => {
     const { id } = params
-    const [movie, setMovie] = useState(null)
+    const [Tvshow, setTvshow] = useState(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState("")
     const [showOverview, setShowOverview] = useState(false)
@@ -69,11 +70,11 @@ const SingleMoviePage = ({ params }) => {
             setLoading(true)
             setError("")
             try {
-                const data = await fetchMovieDetails(id)
-                setMovie(data)
+                const data = await fetchTvshowDetails(id)
+                setTvshow(data)
             } catch (error) {
-                setError("Failed to load movie details.")
-                console.error("Error fetching movie details:", error)
+                setError("Failed to load Tvshow details.")
+                console.error("Error fetching Tvshow details:", error)
             } finally {
                 setLoading(false)
             }
@@ -90,7 +91,7 @@ const SingleMoviePage = ({ params }) => {
       }
     if (error) return <p className="text-red-500">{error}</p>
 
-    if (!movie) return null
+    if (!Tvshow) return null
 
     const {
         title,
@@ -104,7 +105,7 @@ const SingleMoviePage = ({ params }) => {
         credits,
         production_companies,
         trailer,
-        related_Tvshow,
+        related_movies,
         popularity,
         tagline,
         homepage,
@@ -117,7 +118,7 @@ const SingleMoviePage = ({ params }) => {
         backdrop_path,
         alternative_titles,
         social_links,
-    } = movie
+    } = Tvshow;
 
     // Format runtime to "2h 8m"
     const formatRuntime = (minutes) => {
@@ -126,8 +127,8 @@ const SingleMoviePage = ({ params }) => {
         return `${hours}h ${mins}m`
     }
 
-    // Format numbers with commas
-    const formatNumber = (number) => number.toLocaleString("en-US")
+    
+    const formatNumber = (number) => ("en-US")
 
     return (
         <div className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white min-h-screen">
@@ -135,7 +136,7 @@ const SingleMoviePage = ({ params }) => {
                 <div
                     className="absolute inset-0 bg-cover bg-center opacity-70 dark:opacity-30"
                     style={{
-                        backgroundImage: `url(https://image.tmdb.org/t/p/original${movie.backdrop_path})`,
+                        backgroundImage: `url(https://image.tmdb.org/t/p/original${backdrop_path})`,
                     }}
                 ></div>
                 <div className="relative p-6 flex flex-col md:flex-row gap-6">
@@ -147,12 +148,13 @@ const SingleMoviePage = ({ params }) => {
                             height={750}
                             className="rounded-lg shadow-lg w-full max-w-xs md:max-w-none"
                             loading="lazy"
+                            
                         />
                     </div>
 
                     <div className="md:w-2/3 space-y-4">
                         <h1 className="text-3xl md:text-4xl font-bold">
-                            {title}{" "}
+                            {title}
                             <span className="text-gray-800 dark:text-gray-300">
                                 ({new Date(release_date).getFullYear()})
                             </span>
@@ -248,8 +250,8 @@ const SingleMoviePage = ({ params }) => {
 
                         <p className="mt-4 text-gray-900 dark:text-gray-300">
                             {showOverview
-                                ? movie.overview
-                                : `${movie.overview.substring(0, 300)}...`}
+                                ? Tvshow.overview
+                                : `${Tvshow.overview.substring(0, 300)}...`}
                             <button
                                 className="text-blue-500"
                                 onClick={() => setShowOverview(!showOverview)}
@@ -337,7 +339,7 @@ const SingleMoviePage = ({ params }) => {
                         )}
                         <p className="text-sm md:text-base">
                             <strong>Status:</strong>
-                            <p>{movie.status}</p>
+                            <p>{Tvshow.status}</p>
                         </p>
                         <p className="text-sm md:text-base">
                             <strong>Language:</strong>
@@ -357,11 +359,11 @@ const SingleMoviePage = ({ params }) => {
                         </p>
                         <p className="text-sm md:text-base">
                             <strong>Budget:</strong>
-                            <p>${formatNumber(budget)}.00</p>
+                            {<p>${formatNumber(budget)}.00</p> }
                         </p>
                         <p className="text-sm md:text-base">
                             <strong>Revenue:</strong>
-                            <p>${formatNumber(revenue)}.00</p>
+                            { <p>${formatNumber(revenue)}.00</p> }
                         </p>
                         <p className="text-sm md:text-base">
                             <strong>Keywords:</strong>
@@ -432,17 +434,17 @@ const SingleMoviePage = ({ params }) => {
                     Recommended Movies
                 </h3>
                 <div className="flex overflow-x-scroll space-x-4 py-4 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
-                    {related_Tvshow.slice(0, 20).map((movie) => (
+                    {related_movies.slice(0, 20).map((Tvshow) => (
                         <CardComponent
-                            key={movie.id}
-                            image={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                            title={movie.title}
-                            id={movie.id}
+                            key={Tvshow.id}
+                            image={`https://image.tmdb.org/t/p/w500${Tvshow.poster_path}`}
+                            title={Tvshow.title}
+                            id={Tvshow.id}
                             customClass="min-w-[160px] md:min-w-[200px]"
                             CardType="Tvshow"
                         >
                             <p className="text-gray-700 dark:text-gray-400 text-center text-xs md:text-sm">
-                                {movie.release_date}
+                                {Tvshow.release_date}
                             </p>
                         </CardComponent>
                     ))}
